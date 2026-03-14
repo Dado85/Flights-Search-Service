@@ -12,7 +12,7 @@ async function createAirplanes(req, res) {
     return res.status(StatusCodes.CREATED).json(SucessResponse);
   } catch (error) {
     ErrorResponse.error = error;
-    return res.status(error.statusCode).json(ErrorResponse);
+    return res.status(error.statusCodes).json(ErrorResponse);
   }
 }
 async function getAirPlanes(req, res) {
@@ -22,7 +22,7 @@ async function getAirPlanes(req, res) {
     return res.status(StatusCodes.OK).json(SucessResponse);
   } catch (error) {
     ErrorResponse.error = error;
-    return res.status(error.statusCode).json(ErrorResponse);
+    return res.status(error.statusCodes).json(ErrorResponse);
   }
 }
 async function getAirPlane(req, res) {

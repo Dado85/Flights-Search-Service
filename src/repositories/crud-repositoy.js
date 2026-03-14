@@ -32,7 +32,7 @@ class crudRepository {
     }
     return res;
   }
-  async getAll(filter) {
+  async getAll(filter={}) {
     //filter->optional
     if (filter.name) {
       const res = await this.model.findAll({

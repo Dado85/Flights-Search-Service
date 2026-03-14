@@ -52,8 +52,24 @@ async function getAllFlights(req,res) {
      return res.status(error.statusCodes).json(ErrorResponse);
    }
 }
+async function updateFlight(req,res) {
+  try {
+      const decrement = req.body.decrement === "true";
+     const updateFlight=await FlightService.updateFlight({
+      flightId:req.params.id,
+      seats:req.body.seats,
+      decrement
+     })
+       SucessResponse.data = updateFlight;
+    return res.status(StatusCodes.OK).json(SucessResponse);
+  } catch (error) {
+      ErrorResponse.error=error;
+     return res.status(error.statusCodes).json(ErrorResponse);
+  }
+}
 module.exports = {
   createFlights,
   getFlight,
-  getAllFlights
+  getAllFlights,
+  updateFlight
 };

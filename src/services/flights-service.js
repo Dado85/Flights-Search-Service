@@ -46,18 +46,31 @@ async function getFlight(data) {
 }
 async function getAllFlights(data) {
   try {
-    const flights=await flightObj.getAllFlights(data);
+    const flights = await flightObj.getAllFlights(data);
     return flights;
   } catch (error) {
+     console.log(error);
     throw new AppError(
       "can not fetch flights",
       StatusCodes.INTERNAL_SERVER_ERROR,
     );
   }
 }
+async function updateFlight(data) {
+    try {
+      const response=await flightObj.updateRemainingSeats(data.flightId,data.seats,data.decrement);
+      return response;
+    } catch (error) {
+       throw new AppError(
+      "can not update flights",
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    );
+    }
+}
 
 module.exports = {
   createFlights,
   getFlight,
   getAllFlights,
+  updateFlight
 };

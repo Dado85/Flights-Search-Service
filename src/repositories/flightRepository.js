@@ -1,6 +1,10 @@
 const crudRepository = require("./crud-repositoy");
 const { Flights } = require("../models/index.js");
 const { Op } = require("sequelize");
+const AppError = require("../utils/error/app-error.js");
+const { StatusCodes } = require("http-status-codes");
+const db=require("../models/index.js")
+const{rowLevelLock}=require("./rawQueries.js")
 class FlightRepository extends crudRepository {
   constructor() {
     super(Flights);
@@ -40,19 +44,27 @@ class FlightRepository extends crudRepository {
   async getAllFlights(data) {
     try {
       const filterObj = this.#createFilter(data);
-      const limit = data.limit ? parseInt(data.limit) : 5;
-      const offset = data.pages ? parseInt(data.pages) : 1;
       const flights = await Flights.findAll({
         where: filterObj,
-        limit,
-        offset,
       });
       return flights;
     } catch (error) {
+          console.log("REAL ERROR:", error);   
       throw new AppError(
         "can not fetch flights",
         StatusCodes.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+  async updateRemainingSeats(flightId, seats, decrement = true) {
+    await db.sequelize.query(rowLevelLock(flightId))
+    const flight=await Flights.findByPk(flightId);
+    if (decrement) {
+      const response = await flight.decrement("totalSeats", { by: seats });
+      return response;
+    } else {
+      const response = await flight.increment("totalSeats", { by: seats });
+      return response;
     }
   }
 }

@@ -5,4 +5,5 @@ const flightRoutes = express.Router();
 flightRoutes.post("/", FlightController.createFlights);
 flightRoutes.get("/:flightId", FlightController.getFlight);
 flightRoutes.get("/", FlightController.getAllFlights);
+flightRoutes.patch("/:id/seats", FlightController.updateFlight);
 module.exports = flightRoutes;
